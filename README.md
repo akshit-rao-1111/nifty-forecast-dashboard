@@ -58,21 +58,22 @@ prices ──► chronological split ──► train  ──► fit model (train
 
 ## Results: being honest
 
-Run `python scripts/run_backtest.py` and paste your table here:
+**Nifty 50**: data from 2015-01-01, the last 250 trading days up to Oct 2026 used as the test set,
+one-day-ahead forecasts (`python scripts/run_backtest.py`):
 
-<!-- RESULTS: replace this block with the output of scripts/run_backtest.py and add results/backtest.png -->
-| Model | RMSE | MAE | MAPE % | Direction acc % | RMSE vs naive |
+| Model | RMSE (pts) | MAE (pts) | MAPE % | Direction acc % | RMSE vs naive |
 |---|---|---|---|---|---|
-| Naive | – | – | – | – | 1.000 |
-| Drift | – | – | – | – | – |
-| ARIMA | – | – | – | – | – |
-| LSTM | – | – | – | – | – |
+| **Naive (tomorrow = today)** | **205.97** | **154.51** | **0.640** | n/a | **1.000** |
+| Drift | 206.89 | 155.24 | 0.643 | 47.6 | 1.004 |
+| ARIMA(0, 1, 0) | 206.87 | 155.23 | 0.643 | 47.6 | 1.004 |
+| LSTM | 206.51 | 154.94 | 0.642 | 46.8 | 1.003 |
 
-**What to expect:** research on liquid equity indices consistently finds that price-only
-models struggle to beat a random walk at a one-day horizon. If ARIMA and LSTM land close to
-naive (`RMSE vs naive` ≈ 1) with direction accuracy near 50%, **that is the expected
-result, not a bug.** On the synthetic random-walk demo data (`--demo`), ARIMA's AIC search
-correctly selects `(0,1,0)`, a pure random walk. The point of the project is to show *why*:
+**No model beat the naive forecast.** Every model came within 0.4% of it, none called the
+direction better than a coin flip, and ARIMA's AIC search chose `(0,1,0)`, which *is* a random walk.
+
+**This is the expected result, not a bug.** Research on liquid equity indices consistently
+finds that price-only models struggle to beat a random walk at a one-day horizon. The point
+of the project is to show *why*:
 
 1. **Liquid indices are close to a random walk day to day.** Public information is already
    priced in, so past prices alone carry very little signal about tomorrow.

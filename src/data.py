@@ -30,9 +30,13 @@ def load_prices(
         cache_path = Path(cache_dir) / f"{safe}.csv"
 
     try:
+        import warnings
+
         import yfinance as yf
 
-        df = yf.download(ticker, start=start, end=end, progress=False, auto_adjust=True)
+        with warnings.catch_warnings():  # silence pandas deprecation noise from inside yfinance
+            warnings.simplefilter("ignore")
+            df = yf.download(ticker, start=start, end=end, progress=False, auto_adjust=True)
         if df is None or df.empty:
             raise ValueError(f"No data returned for {ticker!r}")
         close = df["Close"]
