@@ -8,3 +8,7 @@ venv/
 data/*.csv
 results/
 .streamlit/secrets.toml
+
+# Streamlit agent skills (local symlinks, created by `streamlit skills`)
+.agents/
+.claude/skills/developing-with-streamlit
